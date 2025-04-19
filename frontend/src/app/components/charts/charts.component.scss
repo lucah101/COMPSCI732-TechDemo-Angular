@@ -1,0 +1,39 @@
+// charts
+canvas {
+  display: block;
+  margin: 20px auto;
+  border-radius: 8px;
+}
+
+// bills list
+ul {
+  list-style: none;
+  padding-left: 0;
+  max-width: 60%;
+  margin: 0 auto;
+  margin-top: 10px;
+
+  li {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: #eee;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #ddd;
+    }
+
+    &.active {
+      background-color: #4b76a4;
+      color: white;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+  

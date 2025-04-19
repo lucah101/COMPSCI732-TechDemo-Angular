@@ -1,0 +1,14 @@
+// defeult styles
+* {
+    outline: none;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+// forces a vertical scrollbar to always be shown on the page
+// This ensures consistent alignment and avoids the page from "jumping" horizontally when navigating
+body {
+    overflow-y: scroll;
+}
+  

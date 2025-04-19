@@ -1,0 +1,100 @@
+<!-- add new bills  -->
+<h2>Add new bills</h2>
+<form (ngSubmit)="submitBatch()" #batchForm="ngForm" class="form">
+  <div class="dpgroup">
+      <div class="form-group">
+          <label for="date">Date:</label>
+          <input id="date" type="date" name="date" [(ngModel)]="batchBillForm.date" />
+      </div>
+  
+      <div class="form-group">
+          <label for="place">Place:</label>
+          <input id="place" type="text" name="place" [(ngModel)]="batchBillForm.place" required />
+      </div>
+  </div>
+
+  <div class="label-batch" *ngFor="let item of batchBillForm.items; let i = index">
+    <label>{{ item.label }}</label>
+    <input type="number" placeholder="Price" [(ngModel)]="batchBillForm.items[i].price" name="price-{{i}}" />
+    <input type="text" placeholder="Note" [(ngModel)]="batchBillForm.items[i].note" name="note-{{i}}" />
+  </div>
+
+  <!-- add bills button valid -->
+  <button type="submit" [disabled]="!batchForm.form.valid || isAllPricesEmpty()">Add Bills</button>
+
+</form>
+
+<hr /><br />
+
+<!-- show weekly bills-->
+<h2>Bills: {{ currentWeekStart | date:'yyyy-MM-dd' }} to {{ getEndOfWeek(currentWeekStart) | date:'MM-dd' }}</h2>
+<h3>Total: ${{ totalThisWeek }}</h3>
+
+<div class="totals-grid">
+  <div class="row labels">
+    <div *ngFor="let label of labels">{{ label }}</div>
+  </div>
+  <div class="row totals">
+    <div *ngFor="let label of labels">${{ (totalByLabel[label] || 0).toFixed(2) }}</div>
+  </div>
+</div>
+
+<div class="weekChange">
+  <button (click)="previousWeek()">Previous Week</button>
+  <button (click)="nextWeek()">Next Week</button>
+</div>
+
+<!-- filter, show bills' details -->
+<!-- edit and delete bill -->
+<div class="filter">
+  <select id="label-select" [(ngModel)]="selectedLabel" (change)="onLabelChange()">
+    <option value="All">All</option>
+    <option *ngFor="let label of labels" [value]="label">{{ label }}</option>
+  </select>
+  <div class="action-buttons">
+    <button (click)="startEditSelected()" [disabled]="selectedBillIndex === null">Edit</button>
+    <button (click)="confirmDeleteSelected()" [disabled]="selectedBillIndex === null">Delete</button>
+  </div>
+</div>
+
+<div *ngFor="let bill of filteredBills; index as i" class="bill" [class.selected]="selectedBillIndex === i" (click)="editIndex !== i && selectBill(i)">
+  <!-- if the bill is not being edited -->
+  <ng-container *ngIf="editIndex !== i">
+    <h3>{{ bill.label }} - ${{ bill.price }}</h3>
+    <p><strong>Date:</strong> {{ bill.date | date: 'yyyy-MM-dd' }}</p>
+    <p><strong>Place:</strong> {{ bill.place }}</p>
+    <p><strong>Note:</strong> {{ bill.note }}</p>
+  </ng-container>
+
+  <!-- if the bill is being edited -->
+  <ng-container *ngIf="editIndex === i">
+    <div class="edit-form">
+      <div class="edit-group">
+        <label>Label:</label>
+        <select [(ngModel)]="bill.label">
+          <option *ngFor="let label of labels" [value]="label">{{ label }}</option>
+        </select>
+      </div>
+      <div class="edit-group">
+        <label>Price:</label>
+        <input type="number" [(ngModel)]="bill.price" />
+      </div>
+      <div class="edit-group">
+        <label>Date:</label>
+        <input type="date" [ngModel]="bill.date | date: 'yyyy-MM-dd'" (ngModelChange)="onEditDateChange($event, bill)" />
+      </div>
+      <div class="edit-group">
+        <label>Place:</label>
+        <input [(ngModel)]="bill.place" />
+      </div>
+      <div class="edit-group">
+        <label>Note:</label>
+        <input [(ngModel)]="bill.note" />
+      </div>
+      <div class="action-buttons">
+        <button (click)="saveEdit()">Save</button>
+        <button (click)="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+  </ng-container>
+</div>

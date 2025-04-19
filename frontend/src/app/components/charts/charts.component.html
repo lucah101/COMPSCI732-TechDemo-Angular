@@ -1,0 +1,14 @@
+<!-- chart -->
+<h2>Pie Chart</h2>
+<canvas #pieCanvas width="400" height="400" style="border: 1px solid #ccc;"></canvas>
+
+<ul>
+  <li *ngFor="let item of totalsList; index as i"
+      (click)="onLabelClick(i)"
+      [class.active]="activeIndex === i">
+    <div class="item">
+        <p>{{ item.label }}</p>
+        <p>${{ item.total }}</p>
+    </div>
+  </li>
+</ul>
